@@ -13,14 +13,23 @@ const generos = [
   { label: 'Ação', value: 1 },
   { label: 'Romance', value: 2 },
   { label: 'Drama', value: 3 },
-  { label: 'Ficção', value: 4 }
+  { label: 'Ficção Científica', value: 4 },
+  { label: 'Terror', value: 5 },
+  { label: 'Aventura', value: 6 },
+  { label: 'Fantasia', value: 7 },
 ]
 
 const filmes = [
-  { titulo: 'O Senhor dos Aneis', diretor: 'Peter jackson', quantidade: 4, genero: 'Aventura' },
-  { titulo: 'fgfgfgfg', diretor: 'Peter jackson', quantidade: 4, genero: 'Comedia' },
-  { titulo: 'çlçllçllçlçl', diretor: 'Peter jackson', quantidade: 4, genero: 'Suspense' },
-  { titulo: 'gflç90yutty', diretor: 'Peter jackson', quantidade: 4, genero: 'Comedia' }
+  { titulo: 'O Senhor dos Aneis', diretor: 'Peter jackson', quantidade: 14, genero: 'Aventura' },
+  { titulo: 'Vingadores:Ultimato', diretor: 'Anthony Russo e Joe Russo', quantidade: 10, genero: 'Fantasia' },
+  { titulo: 'It: A Coisa', diretor: 'Andy Muschietti', quantidade: 5, genero: 'Terror' },
+  { titulo: 'John Wick 3: Parabellum', diretor: 'Chad Stahelski', quantidade: 8, genero: 'Ação' },
+  { titulo: 'Rambo: Até o Fim', diretor: 'Adrian Grunberg', quantidade: 6, genero: 'Ação' },
+  { titulo: 'Velozes e Furiosos: Hobbs & Shaw', diretor: 'David Leitch', quantidade: 18, genero: 'Ação' },
+  { titulo: 'Star Wars: A Guerra dos Clones', diretor: ' Chad Stahelski', quantidade: 28, genero: 'Ficção Científica' },
+  { titulo: 'Pense como Eles', diretor: 'Tim Story', quantidade: 10, genero: 'Comédia' },
+  { titulo: 'Policial em Apuros', diretor: 'Tim Story', quantidade: 3, genero: 'Comédia' },
+  { titulo: 'The Perfect Match', diretor: 'Bille Woodruff', quantidade: 2, genero: 'Romance' }
 ]
 
 class App extends Component {
@@ -35,11 +44,11 @@ class App extends Component {
 
   handleClickMergeFilme = () => {
     let filmes = [...this.state.filmes]
-    if (this.ehNovoFilme)
+    if (this.ehNovoFilme) {
       filmes.push(this.state.filme)
-    else
+    } else {
       filmes[this.findSelectedfilmeIndex()] = this.state.filme
-
+    }
     this.setState({ filmes: filmes, selectedfilme: null, filme: null, displayFormFilme: false })
   }
 
@@ -57,29 +66,40 @@ class App extends Component {
     return this.state.filmes.indexOf(this.state.selectedfilme);
   }
 
-  handleOnChangeField(property, value) {
-    let filme = this.state.filme;
-    filme[property] = value;
-    this.setState({ filme: filme })
+  handleOnChangeField = (e) => {
+    // let filme = this.state.filme;
+    // filme[property] = value;
+    this.setState({ [e.target.name]: e.target.value })
   }
 
   handleFilmeSelected = (e) => {
     this.ehNovoFilme = false;
     this.setState({
       displayFormFilme: true,
-      filme: Object.assign({}, e.data)
+      filme: Object.assign({}, e.data),
+      titulo: e.data.titulo,
+      diretor: e.data.diretor,
+      quantidade: e.data.quantidade,
+      genero: e.data.genero
+    }, () => {
+      console.log(this.state.filme.genero)
+
     })
   }
 
   handleClickNovoFilme = () => {
     this.ehNovoFilme = true;
     this.setState({
-      filme: { titulo: '', diretor: '', quantidade: '', descricao: '' },
+      filme: { titulo: '', diretor: '', quantidade: '', genero: '' },
       displayFormFilme: true
     })
   }
 
   handleOnSelectionChange = (e) => this.setState({ selectedfilme: e.value })
+
+  handleChangeSelect = (e) => {
+    this.setState({ genero: e.target.value });
+  }
 
   render() {
 
@@ -100,7 +120,7 @@ class App extends Component {
             paginator={true}
             rows={15}
             responsive={true}
-            header="CRUD Filmes"
+            header="Filmes"
             footer={btnNovoFilme}
             selectionMode="single" selection={this.state.selectedfilme}
             onSelectionChange={this.handleOnSelectionChange}
@@ -114,7 +134,7 @@ class App extends Component {
           <Dialog
             visible={this.state.displayFormFilme}
             width="300px"
-            header="Detalhes do Filme"
+            header="Filme"
             modal={true}
             footer={actionsButtons}
             onHide={() => this.setState({ displayFormFilme: false })}>
@@ -124,22 +144,29 @@ class App extends Component {
               <div className="p-grid p-fluid">
                 <div className="p-col-4" style={{ padding: '.75em' }}><label htmlFor="titulo">Titulo</label></div>
                 <div className="p-col-8" style={{ padding: '.5em' }}>
-                  <InputText id="titulo" onChange={(e) => { this.handleOnChangeField('titulo', e.target.value) }} value={this.state.filme.titulo} />
+                  <InputText id="titulo" onChange={this.handleOnChangeField} value={this.state.titulo} name="titulo" />
                 </div>
 
                 <div className="p-col-4" style={{ padding: '.75em' }}><label htmlFor="diretor">Diretor</label></div>
                 <div className="p-col-8" style={{ padding: '.5em' }}>
-                  <InputText id="diretor" onChange={(e) => { this.handleOnChangeField('diretor', e.target.value) }} value={this.state.filme.diretor} />
+                  <InputText id="diretor" onChange={this.handleOnChangeField} value={this.state.diretor} name="diretor" />
                 </div>
 
                 <div className="p-col-4" style={{ padding: '.75em' }}><label htmlFor="quantidade">Quantidade</label></div>
                 <div className="p-col-8" style={{ padding: '.5em' }}>
-                  <InputText id="quantidade" onChange={(e) => { this.handleOnChangeField('quantidade', e.target.value) }} value={this.state.filme.quantidade} />
+                  <InputText keyfilter="int" id="quantidade" onChange={this.handleOnChangeField} value={this.state.quantidade} name="quantidade" />
                 </div>
 
                 <div className="p-col-4" style={{ padding: '.75em' }}><label htmlFor="genero">Genero</label></div>
                 <div className="p-col-8" style={{ padding: '.5em' }}>
-                  <InputText id="genero" onChange={(e) => { this.handleOnChangeField('genero', e.target.value) }} value={this.state.filme.genero} />
+                  <Dropdown
+                    id="value"
+                    optionLabel="label"
+                    value={this.state.genero}
+                    options={generos}
+                    onChange={this.handleChangeSelect}
+                  />
+
                 </div>
               </div>
             }
