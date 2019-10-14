@@ -66,24 +66,17 @@ class App extends Component {
     return this.state.filmes.indexOf(this.state.selectedfilme);
   }
 
-  handleOnChangeField = (e) => {
-    // let filme = this.state.filme;
-    // filme[property] = value;
-    this.setState({ [e.target.name]: e.target.value })
+  handleOnChangeField = (property, value) => {
+     let filme = this.state.filme;
+    filme[property] = value;
+    this.setState({ filme })
   }
 
   handleFilmeSelected = (e) => {
     this.ehNovoFilme = false;
     this.setState({
       displayFormFilme: true,
-      filme: Object.assign({}, e.data),
-      titulo: e.data.titulo,
-      diretor: e.data.diretor,
-      quantidade: e.data.quantidade,
-      genero: e.data.genero
-    }, () => {
-      console.log(this.state.filme.genero)
-
+      filme: Object.assign({}, e.data)
     })
   }
 
@@ -108,8 +101,8 @@ class App extends Component {
     </div>
 
     let actionsButtons = <div className="ui-dialog-buttonpane p-clearfix">
-      <Button label="Excluir" icon="pi pi-times" onClick={this.handleClickExcluirFilme} />
-      <Button label={this.ehNovoFilme ? "Salvar" : "Atualizar"} icon="pi pi-check" onClick={this.handleClickMergeFilme} />
+      <Button label="Excluir" icon="pi pi-times" onClick={this.handleClickExcluirFilme} className="p-button-danger p-button-raised p-button-rounded" />
+      <Button label={this.ehNovoFilme ? "Salvar" : "Atualizar"} icon="pi pi-check" onClick={this.handleClickMergeFilme} className="p-button-warning p-button-raised p-button-rounded"/>
     </div>
 
     return (
@@ -127,7 +120,7 @@ class App extends Component {
             onRowSelect={this.handleFilmeSelected}>
             <Column field="titulo" header="Título" />
             <Column field="diretor" header="Diretor" />
-            <Column field="quantidade" header="Quantidade" />
+            <Column field="quantidade" header="Cópias" />
             <Column field="genero" header="Gênero" sortable={true} />
           </DataTable>
 
@@ -144,17 +137,17 @@ class App extends Component {
               <div className="p-grid p-fluid">
                 <div className="p-col-4" style={{ padding: '.75em' }}><label htmlFor="titulo">Titulo</label></div>
                 <div className="p-col-8" style={{ padding: '.5em' }}>
-                  <InputText id="titulo" onChange={this.handleOnChangeField} value={this.state.titulo} name="titulo" />
+                  <InputText id="titulo" onChange={(e) => {this.handleOnChangeField('titulo',e.target.value)}} value={this.state.filme.titulo} name="titulo" />
                 </div>
 
                 <div className="p-col-4" style={{ padding: '.75em' }}><label htmlFor="diretor">Diretor</label></div>
                 <div className="p-col-8" style={{ padding: '.5em' }}>
-                  <InputText id="diretor" onChange={this.handleOnChangeField} value={this.state.diretor} name="diretor" />
+                  <InputText id="diretor" onChange={(e) => {this.handleOnChangeField('diretor',e.target.value)}} value={this.state.filme.diretor} name="diretor" />
                 </div>
 
                 <div className="p-col-4" style={{ padding: '.75em' }}><label htmlFor="quantidade">Quantidade</label></div>
                 <div className="p-col-8" style={{ padding: '.5em' }}>
-                  <InputText keyfilter="int" id="quantidade" onChange={this.handleOnChangeField} value={this.state.quantidade} name="quantidade" />
+                  <InputText keyfilter="int" id="quantidade" onChange={(e) => {this.handleOnChangeField('quantidade',e.target.value)}} value={this.state.filme.quantidade} name="quantidade" />
                 </div>
 
                 <div className="p-col-4" style={{ padding: '.75em' }}><label htmlFor="genero">Genero</label></div>
@@ -162,11 +155,10 @@ class App extends Component {
                   <Dropdown
                     id="value"
                     optionLabel="label"
-                    value={this.state.genero}
+                    value={this.state.filme.genero}
                     options={generos}
-                    onChange={this.handleChangeSelect}
+                    onChange={(e) => {this.handleOnChangeField('label',e.target.value)}}
                   />
-
                 </div>
               </div>
             }
