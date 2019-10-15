@@ -1,19 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import App from './App';
+
 import './index.css';
-import NavBar from './NavBar'
-import App from './Grafico';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
-import './NavBar.css'
-import './Grafico.css'
+
+import './components/NavBar.css'
+import './components/Grafico.css'
+import './components/Filmes.css'
+
 import 'primereact/resources/themes/nova-light/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 
 
-ReactDOM.render(
-  <div>
-    <NavBar />
-    <App />
-  </div>
-  , document.getElementById('root'));
+ReactDOM.render( <App /> , document.getElementById('root'));

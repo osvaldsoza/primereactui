@@ -1,13 +1,10 @@
 import React, { Component } from 'react'
-import './App.css'
 import { Button } from 'primereact/button'
 import { Dropdown } from 'primereact/dropdown'
 import { InputText } from 'primereact/inputtext'
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
 import { Dialog } from 'primereact/dialog'
-import NavBar from './NavBar'
-
 
 const generos = [
   { label: 'Cómedia', value: 0 },
@@ -33,7 +30,7 @@ const filmes = [
   { titulo: 'The Perfect Match', diretor: 'Bille Woodruff', quantidade: 2, genero: 'Romance' }
 ]
 
-class App extends Component {
+class Filmes extends Component {
   constructor() {
     super();
     this.state = {}
@@ -107,71 +104,67 @@ class App extends Component {
     </div>
 
     return (
-      <div>
-        <NavBar />
+      <div className='container'>
+        <div className="content-section implementation">
+          <DataTable
+            value={this.state.filmes}
+            paginator={true}
+            rows={15}
+            responsive={true}
+            header="Filmes"
+            footer={btnNovoFilme}
+            selectionMode="single" selection={this.state.selectedfilme}
+            onSelectionChange={this.handleOnSelectionChange}
+            onRowSelect={this.handleFilmeSelected}>
+            <Column field="titulo" header="Título" />
+            <Column field="diretor" header="Diretor" />
+            <Column field="quantidade" header="Cópias" />
+            <Column field="genero" header="Gênero" sortable={true} />
+          </DataTable>
 
-        <div className='container'>
-          <div className="content-section implementation">
-            <DataTable
-              value={this.state.filmes}
-              paginator={true}
-              rows={15}
-              responsive={true}
-              header="Filmes"
-              footer={btnNovoFilme}
-              selectionMode="single" selection={this.state.selectedfilme}
-              onSelectionChange={this.handleOnSelectionChange}
-              onRowSelect={this.handleFilmeSelected}>
-              <Column field="titulo" header="Título" />
-              <Column field="diretor" header="Diretor" />
-              <Column field="quantidade" header="Cópias" />
-              <Column field="genero" header="Gênero" sortable={true} />
-            </DataTable>
+          <Dialog
+            visible={this.state.displayFormFilme}
+            width="300px"
+            header="Filme"
+            modal={true}
+            footer={actionsButtons}
+            onHide={() => this.setState({ displayFormFilme: false })}>
+            {
+              this.state.filme &&
 
-            <Dialog
-              visible={this.state.displayFormFilme}
-              width="300px"
-              header="Filme"
-              modal={true}
-              footer={actionsButtons}
-              onHide={() => this.setState({ displayFormFilme: false })}>
-              {
-                this.state.filme &&
-
-                <div className="p-grid p-fluid">
-                  <div className="p-col-4" style={{ padding: '.75em' }}><label htmlFor="titulo">Titulo</label></div>
-                  <div className="p-col-8" style={{ padding: '.5em' }}>
-                    <InputText id="titulo" onChange={(e) => { this.handleOnChangeField('titulo', e.target.value) }} value={this.state.filme.titulo} name="titulo" />
-                  </div>
-
-                  <div className="p-col-4" style={{ padding: '.75em' }}><label htmlFor="diretor">Diretor</label></div>
-                  <div className="p-col-8" style={{ padding: '.5em' }}>
-                    <InputText id="diretor" onChange={(e) => { this.handleOnChangeField('diretor', e.target.value) }} value={this.state.filme.diretor} name="diretor" />
-                  </div>
-
-                  <div className="p-col-4" style={{ padding: '.75em' }}><label htmlFor="quantidade">Quantidade</label></div>
-                  <div className="p-col-8" style={{ padding: '.5em' }}>
-                    <InputText keyfilter="int" id="quantidade" onChange={(e) => { this.handleOnChangeField('quantidade', e.target.value) }} value={this.state.filme.quantidade} name="quantidade" />
-                  </div>
-
-                  <div className="p-col-4" style={{ padding: '.75em' }}><label htmlFor="genero">Genero</label></div>
-                  <div className="p-col-8" style={{ padding: '.5em' }}>
-                    <Dropdown
-                      id="value"
-                      optionLabel="label"
-                      value={this.state.filme.genero}
-                      options={generos}
-                      onChange={(e) => { this.handleOnChangeField('label', e.target.value) }}
-                    />
-                  </div>
+              <div className="p-grid p-fluid">
+                <div className="p-col-4" style={{ padding: '.75em' }}><label htmlFor="titulo">Titulo</label></div>
+                <div className="p-col-8" style={{ padding: '.5em' }}>
+                  <InputText id="titulo" onChange={(e) => { this.handleOnChangeField('titulo', e.target.value) }} value={this.state.filme.titulo} name="titulo" />
                 </div>
-              }
-            </Dialog>
-          </div>
+
+                <div className="p-col-4" style={{ padding: '.75em' }}><label htmlFor="diretor">Diretor</label></div>
+                <div className="p-col-8" style={{ padding: '.5em' }}>
+                  <InputText id="diretor" onChange={(e) => { this.handleOnChangeField('diretor', e.target.value) }} value={this.state.filme.diretor} name="diretor" />
+                </div>
+
+                <div className="p-col-4" style={{ padding: '.75em' }}><label htmlFor="quantidade">Quantidade</label></div>
+                <div className="p-col-8" style={{ padding: '.5em' }}>
+                  <InputText keyfilter="int" id="quantidade" onChange={(e) => { this.handleOnChangeField('quantidade', e.target.value) }} value={this.state.filme.quantidade} name="quantidade" />
+                </div>
+
+                <div className="p-col-4" style={{ padding: '.75em' }}><label htmlFor="genero">Genero</label></div>
+                <div className="p-col-8" style={{ padding: '.5em' }}>
+                  <Dropdown
+                    id="value"
+                    optionLabel="label"
+                    value={this.state.filme.genero}
+                    options={generos}
+                    onChange={(e) => { this.handleOnChangeField('label', e.target.value) }}
+                  />
+                </div>
+              </div>
+            }
+          </Dialog>
         </div>
       </div>
     )
   }
 }
 
-export default App
+export default Filmes
