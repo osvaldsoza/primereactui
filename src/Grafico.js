@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Chart } from 'primereact/chart'
+//import { Chart } from 'primereact/chart'
 
 class Grafico extends Component {
 
@@ -31,8 +31,7 @@ class Grafico extends Component {
 
                 <div className="content-section implementation">
                     <h3>Vertical</h3>
-                    <Chart type="bar" data={data} />
-
+                 
 
                 </div>
             </div>
