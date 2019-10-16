@@ -3,7 +3,6 @@ import axios from 'axios'
 import { Chart } from 'primereact/chart'
 
 class Grafico extends Component {
-
     constructor() {
         super()
         this.state = {

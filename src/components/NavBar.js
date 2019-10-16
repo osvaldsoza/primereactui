@@ -1,12 +1,9 @@
 import React, { Component } from 'react'
+import { BrowserRouter as Router, Link, Route } from 'react-router-dom'
 import Grafico from './Grafico'
 import Filmes from './Filmes';
 
-
-import { BrowserRouter as Router, Link, Route } from 'react-router-dom'
-
 class NavBar extends Component {
-
     constructor() {
         super()
         this.state = {
@@ -15,13 +12,9 @@ class NavBar extends Component {
         }
     }
 
-    handleExibirBars = () => {
-        this.setState({ exibirBars: !this.state.exibirBars });
-    }
+    handleExibirBars = () => this.setState({ exibirBars: !this.state.exibirBars });
 
-    handleEsconderBars = () => {
-        this.setState({ exibirBars: !this.state.exibirBars });
-    }
+    handleEsconderBars = () => this.setState({ exibirBars: !this.state.exibirBars });
 
     render() {
         return (
@@ -35,8 +28,12 @@ class NavBar extends Component {
                 </nav>
                 <ul className="navbar-menu" hidden={!this.state.exibirBars}>
                     <li className="navbar-title">Locadora</li>
-                    <li className="navbar-item"><Link to="/filmes" onClick={this.handleEsconderBars}>CRUD Filmes</Link></li>
-                    <li className="navbar-item"><Link to="/" onClick={this.handleEsconderBars}>Exibir Gráfico</Link></li>
+                    <li className="navbar-item">
+                        <Link to="/filmes" onClick={this.handleEsconderBars}>CRUD Filmes</Link>
+                    </li>
+                    <li className="navbar-item">
+                        <Link to="/" onClick={this.handleEsconderBars}>Exibir Gráfico</Link>
+                    </li>
                 </ul>
 
                 <Route exact path="/">

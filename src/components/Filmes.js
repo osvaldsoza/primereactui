@@ -30,7 +30,7 @@ class Filmes extends Component {
       .then((res) => {
         this.handleGetFilmes()
       })
-    this.setState({  selectedfilme: null, filme: null, displayFormFilme: false })
+    this.setState({ selectedfilme: null, filme: null, displayFormFilme: false })
   }
 
   handleClickExcluirFilme = () => {
@@ -74,13 +74,29 @@ class Filmes extends Component {
 
   render() {
     let btnNovoFilme = <div className="p-clearfix" style={{ width: '100%' }}>
-      <Button style={{ float: 'left' }} label="Novo Filme" icon="pi pi-plus" onClick={this.handleClickNovoFilme} />
+      <Button
+        style={{ float: 'left' }}
+        label="Novo Filme"
+        icon="pi pi-plus"
+        onClick={this.handleClickNovoFilme}
+      />
     </div>
 
     let corButton = this.ehNovoFilme ? "p-button-success" : "p-button-warning"
     let actionsButtons = <div className="ui-dialog-buttonpane p-clearfix">
-      <Button label="Excluir" icon="pi pi-times" onClick={this.handleClickExcluirFilme} className="p-button-danger p-button-raised p-button-rounded" />
-      <Button label={this.ehNovoFilme ? "Salvar" : "Atualizar"} icon="pi pi-check" onClick={this.handleClickMergeFilme} className={`${corButton} p-button-raised p-button-rounded`} />
+      <Button
+        label="Excluir"
+        icon="pi pi-times"
+        disabled={this.ehNovoFilme}
+        onClick={this.handleClickExcluirFilme}
+        className="p-button-danger p-button-raised p-button-rounded"
+      />
+      <Button
+        label={this.ehNovoFilme ? "Salvar" : "Atualizar"}
+        icon="pi pi-check"
+        onClick={this.handleClickMergeFilme}
+        className={`${corButton} p-button-raised p-button-rounded`}
+      />
     </div>
 
     return (
@@ -93,7 +109,8 @@ class Filmes extends Component {
             responsive={true}
             header="Filmes"
             footer={btnNovoFilme}
-            selectionMode="single" selection={this.state.selectedfilme}
+            selectionMode="single" 
+            selection={this.state.selectedfilme}
             onSelectionChange={this.handleOnSelectionChange}
             onRowSelect={this.handleFilmeSelected}>
             <Column field="titulo" header="Título" />
