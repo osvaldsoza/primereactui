@@ -20,14 +20,14 @@ class Filmes extends Component {
   }
 
   handleGetFilmes = () => {
-    axios.get('http://localhost:8080/api/filmes')
+    axios.get('https://megasul-filmes-api.herokuapp.com/filmes')
       .then((res) => {
         this.setState({ filmes: res.data })
       })
   }
 
   handleClickMergeFilme = () => {
-    axios.post('http://localhost:8080/api/filmes', this.state.filme)
+    axios.post('https://megasul-filmes-api.herokuapp.com/filmes', this.state.filme)
       .then((res) => {
         this.handleGetFilmes()
       })
@@ -37,7 +37,7 @@ class Filmes extends Component {
   handleClickExcluirFilme = () => {
     let id = this.state.selectedfilme.id
 
-    axios.delete(`http://localhost:8080/api/filmes/${id}`)
+    axios.delete(`https://megasul-filmes-api.herokuapp.com/filmes/${id}`)
       .then((res) => {
         this.handleGetFilmes()
       }).catch(error => console.log(error))

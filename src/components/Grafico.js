@@ -11,7 +11,7 @@ class Grafico extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:8080/api/filmes/copias')
+        axios.get('https://megasul-filmes-api.herokuapp.com/filmes/copias')
             .then((res) => {
                 const foo = res.data.map(x => ({
                     qtdCopias: x[0],
