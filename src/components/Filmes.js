@@ -5,6 +5,7 @@ import { InputText } from 'primereact/inputtext'
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
 import { Dialog } from 'primereact/dialog'
+import { Message } from 'primereact/message';
 
 class Filmes extends Component {
   constructor() {
@@ -30,7 +31,7 @@ class Filmes extends Component {
       .then((res) => {
         this.handleGetFilmes()
       })
-    this.setState({ selectedfilme: null, filme: null, displayFormFilme: false })
+    this.setState({ selectedfilme: null, filme: '', displayFormFilme: false })
   }
 
   handleClickExcluirFilme = () => {
@@ -95,6 +96,9 @@ class Filmes extends Component {
         label={this.ehNovoFilme ? "Salvar" : "Atualizar"}
         icon="pi pi-check"
         onClick={this.handleClickMergeFilme}
+        disabled={this.ehNovoFilme && (this.state.filme.titulo === '' || 
+        this.state.filme.diretor  === '' || 
+        this.state.filme.qtdCopias === '' || this.state.filme.genero === '')}
         className={`${corButton} p-button-raised p-button-rounded`}
       />
     </div>
@@ -109,7 +113,7 @@ class Filmes extends Component {
             responsive={true}
             header="Filmes"
             footer={btnNovoFilme}
-            selectionMode="single" 
+            selectionMode="single"
             selection={this.state.selectedfilme}
             onSelectionChange={this.handleOnSelectionChange}
             onRowSelect={this.handleFilmeSelected}>
@@ -130,24 +134,40 @@ class Filmes extends Component {
               this.state.filme &&
 
               <div className="p-grid p-fluid">
-                <div className="p-col-4" style={{ padding: '.75em' }}><label htmlFor="titulo">Titulo</label></div>
-                <div className="p-col-8" style={{ padding: '.5em' }}>
-                  <InputText id="titulo" onChange={(e) => { this.handleOnChangeField('titulo', e.target.value) }} value={this.state.filme.titulo} name="titulo" />
+                <div className="p-col-3" style={{ padding: '.75em' }}><label htmlFor="titulo">Titulo</label></div>
+                <div className="d-flex p-col-9" style={{ padding: '.5em' }}>
+                  <InputText id="titulo" className="p-error" onChange={(e) => { this.handleOnChangeField('titulo', e.target.value) }} value={this.state.filme.titulo} name="titulo" />
+                  {
+                    this.state.filme.titulo === '' &&
+                    <Message severity="error" text="Campo obrigatório" style={{width:'20em'}} />
+                  }
                 </div>
 
-                <div className="p-col-4" style={{ padding: '.75em' }}><label htmlFor="diretor">Diretor</label></div>
-                <div className="p-col-8" style={{ padding: '.5em' }}>
-                  <InputText id="diretor" onChange={(e) => { this.handleOnChangeField('diretor', e.target.value) }} value={this.state.filme.diretor} name="diretor" />
+                <div className="p-col-3" style={{ padding: '.75em' }}><label htmlFor="diretor">Diretor</label></div>
+                <div className="d-flex p-col-9" style={{ padding: '.5em' }}>
+                  <InputText id="diretor" className="p-error" onChange={(e) => { this.handleOnChangeField('diretor', e.target.value) }} value={this.state.filme.diretor} name="diretor" />
+                  {
+                    this.state.filme.diretor === '' &&
+                    <Message severity="error" text="Campo obrigatório" style={{width:'20em'}} />
+                  }
                 </div>
 
-                <div className="p-col-4" style={{ padding: '.75em' }}><label htmlFor="qtdCopias">Número de Cópias</label></div>
-                <div className="p-col-8" style={{ padding: '.5em' }}>
-                  <InputText keyfilter="int" id="qtdCopias" onChange={(e) => { this.handleOnChangeField('qtdCopias', e.target.value) }} value={this.state.filme.qtdCopias} name="qtdCopias" />
+                <div className="p-col-3" style={{ padding: '.75em' }}><label htmlFor="qtdCopias">Número de Cópias</label></div>
+                <div className="d-flex p-col-9" style={{ padding: '.5em' }}>
+                  <InputText keyfilter="int" className="p-error" id="qtdCopias" onChange={(e) => { this.handleOnChangeField('qtdCopias', e.target.value) }} value={this.state.filme.qtdCopias} name="qtdCopias" />
+                  {
+                    this.state.filme.qtdCopias === '' &&
+                    <Message severity="error" text="Campo obrigatório" style={{width:'20em'}} />
+                  }
                 </div>
 
-                <div className="p-col-4" style={{ padding: '.75em' }}><label htmlFor="genero">Genero</label></div>
-                <div className="p-col-8" style={{ padding: '.5em' }}>
-                  <InputText id="genero" onChange={(e) => { this.handleOnChangeField('genero', e.target.value) }} value={this.state.filme.genero} name="genero" />
+                <div className="p-col-3" style={{ padding: '.75em' }}><label htmlFor="genero">Genero</label></div>
+                <div className="d-flex p-col-9" style={{ padding: '.5em' }}>
+                  <InputText id="genero" className="p-error" onChange={(e) => { this.handleOnChangeField('genero', e.target.value) }} value={this.state.filme.genero} name="genero" />
+                  {
+                    this.state.filme.titulo === '' &&
+                    <Message severity="error" text="Campo obrigatório" style={{width:'20em'}} />
+                  }
                 </div>
               </div>
             }
