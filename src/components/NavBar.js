@@ -19,6 +19,10 @@ class NavBar extends Component {
         this.setState({ exibirBars: !this.state.exibirBars });
     }
 
+    handleEsconderBars = () => {
+        this.setState({ exibirBars: !this.state.exibirBars });
+    }
+
     render() {
         return (
             <Router>
@@ -31,8 +35,8 @@ class NavBar extends Component {
                 </nav>
                 <ul className="navbar-menu" hidden={!this.state.exibirBars}>
                     <li className="navbar-title">Locadora</li>
-                    <li className="navbar-item"><Link to="/filmes">CRUD Filmes</Link></li>
-                    <li className="navbar-item"><Link to="/">Exibir Gráfico</Link></li>
+                    <li className="navbar-item"><Link to="/filmes" onClick={this.handleEsconderBars}>CRUD Filmes</Link></li>
+                    <li className="navbar-item"><Link to="/" onClick={this.handleEsconderBars}>Exibir Gráfico</Link></li>
                 </ul>
 
                 <Route exact path="/">

@@ -1,28 +1,38 @@
 import React, { Component } from 'react'
+import axios from 'axios'
 import { Chart } from 'primereact/chart'
 
-const generos = [
-    { genero: 'Cómedia', qunatidade: 65 },
-    { genero: 'Ação', qunatidade: 59 },
-    { genero: 'Romance', qunatidade: 80 },
-    { genero: 'Drama', qunatidade: 81 },
-    { genero: 'Ficção', qunatidade: 56 },
-    { genero: 'Terror', qunatidade: 40 },
-    { genero: 'Aventura', qunatidade: 23 },
-    { genero: 'Fantasia', qunatidade: 55 }
-]
 class Grafico extends Component {
+
+    constructor() {
+        super()
+        this.state = {
+            generos: []
+        }
+    }
+
+    componentDidMount() {
+        axios.get('http://localhost:8080/api/filmes/copias')
+            .then((res) => {
+                const foo = res.data.map(x => ({
+                    qtdCopias: x[0],
+                    genero: x[1]
+                }))
+                this.setState({ generos: foo })
+            })
+    }
+
     render() {
         const data = {
-            labels: generos.map(x => {
+            labels: this.state.generos.map(x => {
                 return x.genero
             }),
             datasets: [
                 {
                     label: 'Número de cópias',
                     backgroundColor: '#42A5F5',
-                    data: generos.map(x => {
-                        return x.qunatidade
+                    data: this.state.generos.map(x => {
+                        return x.qtdCopias
                     })
                 }
             ]

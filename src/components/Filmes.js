@@ -1,72 +1,56 @@
 import React, { Component } from 'react'
+import axios from 'axios'
 import { Button } from 'primereact/button'
-import { Dropdown } from 'primereact/dropdown'
 import { InputText } from 'primereact/inputtext'
 import { DataTable } from 'primereact/datatable'
 import { Column } from 'primereact/column'
 import { Dialog } from 'primereact/dialog'
 
-const generos = [
-  { label: 'Cómedia', value: 0 },
-  { label: 'Ação', value: 1 },
-  { label: 'Romance', value: 2 },
-  { label: 'Drama', value: 3 },
-  { label: 'Ficção Científica', value: 4 },
-  { label: 'Terror', value: 5 },
-  { label: 'Aventura', value: 6 },
-  { label: 'Fantasia', value: 7 },
-]
-
-const filmes = [
-  { titulo: 'O Senhor dos Aneis', diretor: 'Peter jackson', quantidade: 14, genero: 'Aventura' },
-  { titulo: 'Vingadores:Ultimato', diretor: 'Anthony Russo e Joe Russo', quantidade: 10, genero: 'Fantasia' },
-  { titulo: 'It: A Coisa', diretor: 'Andy Muschietti', quantidade: 5, genero: 'Terror' },
-  { titulo: 'John Wick 3: Parabellum', diretor: 'Chad Stahelski', quantidade: 8, genero: 'Ação' },
-  { titulo: 'Rambo: Até o Fim', diretor: 'Adrian Grunberg', quantidade: 6, genero: 'Ação' },
-  { titulo: 'Velozes e Furiosos: Hobbs & Shaw', diretor: 'David Leitch', quantidade: 18, genero: 'Ação' },
-  { titulo: 'Star Wars: A Guerra dos Clones', diretor: ' Chad Stahelski', quantidade: 28, genero: 'Ficção Científica' },
-  { titulo: 'Pense como Eles', diretor: 'Tim Story', quantidade: 10, genero: 'Comédia' },
-  { titulo: 'Policial em Apuros', diretor: 'Tim Story', quantidade: 3, genero: 'Comédia' },
-  { titulo: 'The Perfect Match', diretor: 'Bille Woodruff', quantidade: 2, genero: 'Romance' }
-]
-
 class Filmes extends Component {
   constructor() {
     super();
-    this.state = {}
+    this.state = {
+      genero: ''
+    }
   }
 
   componentDidMount() {
-    this.setState({ filmes })
+    this.handleGetFilmes();
+  }
+
+  handleGetFilmes = () => {
+    axios.get('http://localhost:8080/api/filmes')
+      .then((res) => {
+        this.setState({ filmes: res.data })
+      })
   }
 
   handleClickMergeFilme = () => {
-    let filmes = [...this.state.filmes]
-    if (this.ehNovoFilme) {
-      filmes.push(this.state.filme)
-    } else {
-      filmes[this.findSelectedfilmeIndex()] = this.state.filme
-    }
-    this.setState({ filmes: filmes, selectedfilme: null, filme: null, displayFormFilme: false })
+    axios.post('http://localhost:8080/api/filmes', this.state.filme)
+      .then((res) => {
+        this.handleGetFilmes()
+      })
+    this.setState({  selectedfilme: null, filme: null, displayFormFilme: false })
   }
 
   handleClickExcluirFilme = () => {
-    let index = this.findSelectedfilmeIndex();
+    let id = this.state.selectedfilme.id
+
+    axios.delete(`http://localhost:8080/api/filmes/${id}`)
+      .then((res) => {
+        this.handleGetFilmes()
+      }).catch(error => console.log(error))
+
     this.setState({
-      filmes: this.state.filmes.filter((val, i) => i !== index),
       selectedfilme: null,
       filme: null,
       displayFormFilme: false
     })
   }
 
-  findSelectedfilmeIndex() {
-    return this.state.filmes.indexOf(this.state.selectedfilme);
-  }
-
   handleOnChangeField = (property, value) => {
     let filme = this.state.filme;
-    filme[property] = value;
+    filme[property] = typeof value === 'object' ? value.label : value;
     this.setState({ filme })
   }
 
@@ -81,26 +65,22 @@ class Filmes extends Component {
   handleClickNovoFilme = () => {
     this.ehNovoFilme = true;
     this.setState({
-      filme: { titulo: '', diretor: '', quantidade: '', genero: '' },
+      filme: { titulo: '', diretor: '', qtdCopias: '', genero: '' },
       displayFormFilme: true
     })
   }
 
-  handleOnSelectionChange = (e) => this.setState({ selectedfilme: e.value })
-
-  handleChangeSelect = (e) => {
-    this.setState({ genero: e.target.value });
-  }
+  handleOnSelectionChange = (e) => this.setState({ selectedfilme: e.value, genero: e.value.genero })
 
   render() {
-
     let btnNovoFilme = <div className="p-clearfix" style={{ width: '100%' }}>
       <Button style={{ float: 'left' }} label="Novo Filme" icon="pi pi-plus" onClick={this.handleClickNovoFilme} />
     </div>
 
+    let corButton = this.ehNovoFilme ? "p-button-success" : "p-button-warning"
     let actionsButtons = <div className="ui-dialog-buttonpane p-clearfix">
       <Button label="Excluir" icon="pi pi-times" onClick={this.handleClickExcluirFilme} className="p-button-danger p-button-raised p-button-rounded" />
-      <Button label={this.ehNovoFilme ? "Salvar" : "Atualizar"} icon="pi pi-check" onClick={this.handleClickMergeFilme} className="p-button-warning p-button-raised p-button-rounded" />
+      <Button label={this.ehNovoFilme ? "Salvar" : "Atualizar"} icon="pi pi-check" onClick={this.handleClickMergeFilme} className={`${corButton} p-button-raised p-button-rounded`} />
     </div>
 
     return (
@@ -109,7 +89,7 @@ class Filmes extends Component {
           <DataTable
             value={this.state.filmes}
             paginator={true}
-            rows={15}
+            rows={6}
             responsive={true}
             header="Filmes"
             footer={btnNovoFilme}
@@ -118,7 +98,7 @@ class Filmes extends Component {
             onRowSelect={this.handleFilmeSelected}>
             <Column field="titulo" header="Título" />
             <Column field="diretor" header="Diretor" />
-            <Column field="quantidade" header="Cópias" />
+            <Column field="qtdCopias" header="Número de Cópias" />
             <Column field="genero" header="Gênero" sortable={true} />
           </DataTable>
 
@@ -143,20 +123,14 @@ class Filmes extends Component {
                   <InputText id="diretor" onChange={(e) => { this.handleOnChangeField('diretor', e.target.value) }} value={this.state.filme.diretor} name="diretor" />
                 </div>
 
-                <div className="p-col-4" style={{ padding: '.75em' }}><label htmlFor="quantidade">Quantidade</label></div>
+                <div className="p-col-4" style={{ padding: '.75em' }}><label htmlFor="qtdCopias">Número de Cópias</label></div>
                 <div className="p-col-8" style={{ padding: '.5em' }}>
-                  <InputText keyfilter="int" id="quantidade" onChange={(e) => { this.handleOnChangeField('quantidade', e.target.value) }} value={this.state.filme.quantidade} name="quantidade" />
+                  <InputText keyfilter="int" id="qtdCopias" onChange={(e) => { this.handleOnChangeField('qtdCopias', e.target.value) }} value={this.state.filme.qtdCopias} name="qtdCopias" />
                 </div>
 
                 <div className="p-col-4" style={{ padding: '.75em' }}><label htmlFor="genero">Genero</label></div>
                 <div className="p-col-8" style={{ padding: '.5em' }}>
-                  <Dropdown
-                    id="value"
-                    optionLabel="label"
-                    value={this.state.filme.genero}
-                    options={generos}
-                    onChange={(e) => { this.handleOnChangeField('label', e.target.value) }}
-                  />
+                  <InputText id="genero" onChange={(e) => { this.handleOnChangeField('genero', e.target.value) }} value={this.state.filme.genero} name="genero" />
                 </div>
               </div>
             }
