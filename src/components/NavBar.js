@@ -13,7 +13,6 @@ class NavBar extends Component {
     }
 
     handleExibirBars = () => this.setState({ exibirBars: !this.state.exibirBars });
-
     handleEsconderBars = () => this.setState({ exibirBars: !this.state.exibirBars });
 
     render() {
