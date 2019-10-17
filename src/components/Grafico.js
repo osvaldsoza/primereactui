@@ -39,7 +39,7 @@ class Grafico extends Component {
 
         return (
             <div className="d-flex align-items-center flex-column content-section implementation">
-                <h3>Quantidade de Filmes por Gênero</h3>
+                <h3 style={{fontSize:'2vw'}}>Quantidade de Filmes por Gênero</h3>
                 <Chart type="bar" data={data} className="chart" />
             </div>
         )
