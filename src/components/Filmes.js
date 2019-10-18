@@ -11,7 +11,8 @@ class Filmes extends Component {
   constructor() {
     super();
     this.state = {
-      genero: ''
+      genero: '',
+      filmes:[]
     }
   }
 
@@ -111,7 +112,7 @@ class Filmes extends Component {
             paginator={true}
             rows={6}
             responsive={true}
-            header="Filmes"
+            header={this.state.filmes.length > 0 ? "Filmes" : "Não há registros para serem exibidos"}
             footer={btnNovoFilme}
             selectionMode="single"
             selection={this.state.selectedfilme}
