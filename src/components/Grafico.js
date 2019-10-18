@@ -41,13 +41,13 @@ class Grafico extends Component {
             <div className="content-section implementation">
                 {
                     this.state.generos.length <= 0 ?
-                        <ProgressSpinner className="d-flex align-items-center"/>
+                        <ProgressSpinner className="d-flex align-items-center" />
                         :
                         <div className="d-flex align-items-center flex-column">
                             <h3>Quantidade de Filmes por Gênero</h3>
                             <Chart type="bar" data={data} className="chart" />
                         </div>
-                }
+                    }
             </div>
         )
     }
