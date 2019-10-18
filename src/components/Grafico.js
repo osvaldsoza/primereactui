@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { Chart } from 'primereact/chart'
+import { ProgressSpinner } from 'primereact/progressspinner'
 
 class Grafico extends Component {
     constructor() {
@@ -20,7 +21,6 @@ class Grafico extends Component {
                 this.setState({ generos: foo })
             })
     }
-
     render() {
         const data = {
             labels: this.state.generos.map(x => {
@@ -38,9 +38,16 @@ class Grafico extends Component {
         };
 
         return (
-            <div className="d-flex align-items-center flex-column content-section implementation">
-                <h3>Quantidade de Filmes por Gênero</h3>
-                <Chart type="bar" data={data} className="chart" />
+            <div className="content-section implementation">
+                {
+                    this.state.generos.length <= 0 ?
+                        <ProgressSpinner className="d-flex align-items-center"/>
+                        :
+                        <div className="d-flex align-items-center flex-column">
+                            <h3>Quantidade de Filmes por Gênero</h3>
+                            <Chart type="bar" data={data} className="chart" />
+                        </div>
+                }
             </div>
         )
     }
